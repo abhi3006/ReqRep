@@ -1,0 +1,103 @@
+
+
+
+case -1  -- sessionId 
+------------
+-groupOrderNum  or orderNum // in VOLTEB2B.ORDER_MASTER (groupOrderNum,orderNum)
+	select * from VOLTEB2B.ORDER_MASTER where (ORDER_NBR='MB3000010591604' or GROUP_ORDER_NBR='MB3000010591600');
+
+
+ -seesion_di (select * from COMM_TRANS.COMM_REQ_RESP_LOG SESSION_ID='ed27f3b2-49e3-440c-9ee1-b2b123b1fc36') from this query need CORRELATION_ID
+		 
+	CORRELATION_ID == GROUP_ORDER_NBR in VOLTEB2B.ORDER_MASTER
+	
+case -2   when groupOrderNum  or orderNum
+-----------
+select * from VOLTEB2B.ORDER_MASTER where (ORDER_NBR='MB3000010591604' or GROUP_ORDER_NBR='MB3000010591600');
+
+select * from VOLTEB2B.OPT_ORDER_TRACKING where ORDER_NBR='MB3000010591604';
+
+
+// Request
+{
+    "groupOrderNum": "MB3000010590480", // Corred_id new tabel   //
+    "sessionId": "",
+    "orderNum": "MB3000010590483"   
+}
+// Response
+{
+    "totalElements": 305,
+    "pageSize": 10,
+    "totalPages": 31,
+    "currentPageNo": 0,
+    "orderDetails": {
+        "orderNumber": "MB3000010590483", // VOLTEB2B.ORDER_MASTER where (group_order_nbr = '' or order_nbr = '')  // single record 
+        "posOrder": "30012639", // POS_ORDER_NR from VOLTEB2B.ORDER_MASTER
+        "locationCode": "P166701", //NETACE_LOCATION from VOLTEB2B.ORDER_MASTER
+    },
+    "submitWorkFlow": [ // select * from VOLTEB2B.OPT_ORDER_TRACKING where order_nbr = 'MB3000010590483' order by created_dt desc 
+        {  
+            "optStepId": "VALIDATION", // OPT_STEP_ID from VOLTEB2B.OPT_ORDER_TRACKING
+            "optMessage": "Order Valdiation", // OPT_MESSAGE from VOLTEB2B.OPT_ORDER_TRACKING
+            "optStatus": "SUCCESS", // OPT_STATUS from VOLTEB2B.OPT_ORDER_TRACKING
+            "createdBy": "ORDER-COMPOSITE", // CREATED_BY from VOLTEB2B.OPT_ORDER_TRACKING
+            "serverInstance": "ORDER -COMPOSITE Serevr", //SERVER_INSTANCE from VOLTEB2B.OPT_ORDER_TRACKING
+            "createdDate": "19-DEC-22 02.37.14.394000000 PM" //CREATED_DT from VOLTEB2B.OPT_ORDER_TRACKING
+        },
+        {
+            "optStepId": "VALIDATION",
+            "optMessage": "Order Valdiation",
+            "optStatus": "SUCCESS",
+            "createdBy": "ORDER-COMPOSITE",
+            "serverInstance": "ORDER -COMPOSITE Serevr",
+            "createdDate": "19-DEC-22 02.37.14.394000000 PM"
+        }
+    ]
+}
+
+VOLTEB2B.ORDER_MASTER
+
+Name                Null?    Type          
+------------------- -------- ------------- 
+ID                  NOT NULL NUMBER        
+ORDER_NBR           NOT NULL VARCHAR2(50)  
+GROUP_ORDER_NBR              VARCHAR2(50)  
+ORDER_TYPE                   VARCHAR2(200) 
+ORDER_STATUS        NOT NULL VARCHAR2(25)  
+ORDER_COUNT                  NUMBER(38)    
+POS_ORDER_NR                 VARCHAR2(50)  
+NETACE_LOCATION              VARCHAR2(60)  
+ECPD_ID                      NUMBER        
+OP_CENTER                    VARCHAR2(16)  
+IS_MANAGER_APPROVAL          VARCHAR2(10)  
+ORDER_CHANNEL                VARCHAR2(10)  
+ORDER_REQUEST                CLOB          
+ORDER_RESPONSE               CLOB          
+CREATED_BY          NOT NULL VARCHAR2(100) 
+CREATED_DT          NOT NULL TIMESTAMP(6)  
+MODIFIED_BY         NOT NULL VARCHAR2(100) 
+MODIFIED_DT                  TIMESTAMP(6)  
+SERVER_INSTANCE              VARCHAR2(100) 
+PRE_ORDER_NBR                VARCHAR2(50)  
+CREDIT_APP_NBR               VARCHAR2(50)  
+MULTILINE_SEQ_NBR            VARCHAR2(50)  
+NEW_PO_NBR                   VARCHAR2(100) 
+IP_ADDRESS                   VARCHAR2(15)  
+
+
+
+desc VOLTEB2B.OPT_ORDER_TRACKING
+
+Name               Null?    Type           
+------------------ -------- -------------- 
+ID                 NOT NULL NUMBER         
+ORDER_NBR          NOT NULL VARCHAR2(50)   
+OPT_TRANSACTION_ID NOT NULL VARCHAR2(50)   
+OPT_STATUS         NOT NULL VARCHAR2(25)   
+OPT_STEP_ID        NOT NULL VARCHAR2(50)   
+OPT_MESSAGE                 VARCHAR2(1000) 
+CREATED_BY         NOT NULL VARCHAR2(100)  
+CREATED_DT         NOT NULL TIMESTAMP(6)   
+MODIFIED_BY                 VARCHAR2(100)  
+MODIFIED_DT                 TIMESTAMP(6)   
+SERVER_INSTANCE             VARCHAR2(100)
